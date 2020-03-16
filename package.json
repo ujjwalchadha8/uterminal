@@ -1,0 +1,27 @@
+{
+  "name": "uterminal",
+  "version": "0.1.0",
+  "description": "Front end terminal",
+  "main": "dist/UTerminal.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "g"
+  },
+  "keywords": [
+    "terminal",
+    "uterminal",
+    "front",
+    "end",
+    "command",
+    "prompt",
+    "html",
+    "js",
+    "typescript"
+  ],
+  "author": "Ujjwal Chadha",
+  "license": "ISC"
+}
