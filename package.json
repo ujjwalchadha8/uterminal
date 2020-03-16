@@ -1,15 +1,20 @@
 {
   "name": "uterminal",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Front end terminal",
   "main": "dist/UTerminal.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/UTerminal.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "g"
+    "url": "https://github.com/ujjwalchadha8/uterminal"
+  },
+  "devDependencies": {
+    "typescript": "3.8.3"
   },
   "keywords": [
     "terminal",
@@ -23,5 +28,5 @@
     "typescript"
   ],
   "author": "Ujjwal Chadha",
-  "license": "ISC"
+  "license": "MIT"
 }

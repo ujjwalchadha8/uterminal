@@ -1,0 +1,20 @@
+.uterminal {
+    background-color: #121212;
+    font-family: "Source Code Pro", monospace;
+    color: rgba(255,255,255,.70);
+    padding: 10px;
+    line-height: 1.5;
+}
+
+.uterminal span:focus {
+    outline: none;
+}
+
+.uterminal a {
+    text-decoration: underline;
+    color: #007bff;
+}
+
+.uterminal .suggestion {
+    color: gray;
+}
