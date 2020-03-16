@@ -4,12 +4,12 @@ class UTerminal {
     private rootElement: HTMLElement;
     private containerElement: HTMLElement;
     private signature: string;
-    private handleCommand: Function;
-    private suggestCommand: Function;
+    private handleCommand: Function | null;
+    private suggestCommand: Function | null;
     private previousCommands: string[];
 
     constructor(id: string, signature: string) {
-        this.rootElement = document.getElementById(id);
+        this.rootElement = <HTMLElement> document.getElementById(id);
         this.containerElement = this.rootElement;
         this.signature = signature;
         this.handleCommand = null;
@@ -23,11 +23,11 @@ class UTerminal {
         });
     }
 
-    giveCommandSuggestion(suggestCommand) {
+    giveCommandSuggestion(suggestCommand: Function) {
         this.suggestCommand = suggestCommand;
     }
 
-    onNewCommand(handleCommand) {
+    onNewCommand(handleCommand: Function) {
         this.handleCommand = handleCommand;
     }
 
@@ -43,7 +43,7 @@ class UTerminal {
         this.containerElement.innerHTML = "";
     }
 
-    write(response) {
+    write(response: string) {
         const responseContainer = document.createElement('div');
         const responseElement = document.createElement('text');
         responseElement.innerHTML = response;
@@ -53,17 +53,20 @@ class UTerminal {
 
     moveCursorToEnd() {
         setTimeout(() => {    //Move this out of the current function stack to let the cursor appear before moving it
-            const contentEditableElement = this.containerElement.querySelector('[contenteditable=true]');
+            const contentEditableElement = <HTMLElement> this.containerElement.querySelector('[contenteditable=true]');
             const range = document.createRange();//Create a range (a range is a like the selection but invisible)
             range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
             range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
             const selection = window.getSelection();//get the selection object (allows you to change selection)
+            if (!selection) {
+                return;
+            }
             selection.removeAllRanges();//remove any selections already made
             selection.addRange(range);//make the range you have just created the visible selection
         }, 0);
     }
 
-    input(message, handleInput, suggest) {
+    input(message: string, handleInput: Function, suggest: Function) {
         const commandContainer = document.createElement('div');
         commandContainer.innerHTML = `
             <text>${message}</text>
@@ -98,7 +101,7 @@ class UTerminal {
                 this.moveCursorToEnd();
             }
         });
-        editor.addEventListener('input', (e: InputEvent) => {
+        editor.addEventListener('input', () => {
             if (suggest) {
                 suggestor.innerText = suggest(editor.innerText) || "";
             }
@@ -111,28 +114,18 @@ class UTerminal {
     }
 
     newCommandLine() { 
-        this.input(`<span style='color: green;'>${this.signature}$</span>`, userCommand => {
+        this.input(`<span style='color: green;'>${this.signature}$</span>`, (userCommand: string) => {
             if (!this.handleCommand) {
                 console.error('No command handler specified for terminal. You can create a command handler by onNewCommand function.');
                 return;
             }
             this.handleCommand(userCommand);
-        }, userInput => {
+        }, (userInput: string) => {
             if (!this.suggestCommand) {
                 return "";
             }
             return this.suggestCommand(userInput);
         });
-    }
-
-    __isValidKeycode(keycode) {
-        keycode = parseInt(keycode); 
-        return (keycode > 47 && keycode < 58)   || // number keys
-            keycode == 32 || // spacebar
-            (keycode > 64 && keycode < 91)   || // letter keys
-            (keycode > 95 && keycode < 112)  || // numpad keys
-            (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-            (keycode > 218 && keycode < 223); 
     }
 
 }
